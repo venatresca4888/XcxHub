@@ -1,6 +1,3 @@
--- [[ OrbitAI Webhook Module ]] --
--- Save this file to GitHub/Pastebin and copy the RAW link.
-
 return function(title, statusText, color)
     -- ดึงค่า Config จาก getgenv() ของสคริปต์หลัก
     local config = getgenv().Config
@@ -25,7 +22,7 @@ return function(title, statusText, color)
                     { ["name"] = "Game ID", ["value"] = tostring(game.PlaceId), ["inline"] = true },
                     { ["name"] = "Server JobID", ["value"] = "||" .. game.JobId .. "||", ["inline"] = false },
                 },
-                ["footer"] = { ["text"] = "OrbitAI Notification System" },
+                ["footer"] = { ["text"] = "XcxHub Notification System" },
                 ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
             }
 
