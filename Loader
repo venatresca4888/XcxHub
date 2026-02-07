@@ -14,7 +14,7 @@ local games = {
     [2474168535] = 'https://raw.githubusercontent.com/GGXD99/XcxHub/refs/heads/main/script/Westbound/script.lua', -- Westbound
     [84988808589910] = 'https://raw.githubusercontent.com/GGXD99/XcxHub/refs/heads/main/script/Rogue-Piece/SCRIPT.lua', -- Rogue Piece
     [8735521924] = 'https://raw.githubusercontent.com/GGXD99/XcxHub/refs/heads/main/script/CENTAURA/Ui.lua', -- CENTAURA
-    [2753915549] = 'https://raw.githubusercontent.com/GGXD99/XcxHub/refs/heads/main/script/Blox-Fruit/ChestFram.lua', -- BLox Fruit Chest Fram
+    [2753915549] = 'https://raw.githubusercontent.com/GGXD99/XcxHub/refs/heads/main/script/Blox-Fruit/AutoFarmChar.lua', -- BLox Fruit Chest Fram
 }
 
 if games[PlaceId] then 
