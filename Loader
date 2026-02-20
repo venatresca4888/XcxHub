@@ -21,10 +21,8 @@ if games[PlaceId] then
     lib:Notify('Supported game loading: ' .. info.Name)
     loadstring(game:HttpGet(games[PlaceId]))()
 else
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Kaguya11/KaguHubRework/main/KaguHub.lua"))()
-    setclipboard("https://discord.gg/AkWWsyw2eG")
     game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "Kagu Hub",
+        Title = "Xcx Hub",
         Text = "Game not supported: " .. info.Name,
         Duration = 5
     })
