@@ -22,9 +22,5 @@ if games[PlaceId] then
     lib:Notify('Supported game loading: ' .. info.Name)
     loadstring(game:HttpGet(games[PlaceId]))()
 else
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "Xcx Hub",
-        Text = "Game not supported: " .. info.Name,
-        Duration = 5
-    })
+    lib:Notify('Game not supported: ' .. info.Name)
 end
