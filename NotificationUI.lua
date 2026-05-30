@@ -30,22 +30,25 @@ end
 
 local Holder = Gui.Holder
 
-function Notify(Title, Message, Duration)
+local function GetNotifications()
+	local Notifications = {}
+
+	for _,v in ipairs(Holder:GetChildren()) do
+		if v:IsA("Frame") then
+			table.insert(Notifications, v)
+		end
+	end
+
+	return Notifications
+end
+
+local function Notify(Title, Message, Duration)
 	Duration = Duration or 5
 
-	while #Holder:GetChildren() > MAX_NOTIFICATIONS + 1 do
-		local Oldest
+	local Notifications = GetNotifications()
 
-		for _,v in ipairs(Holder:GetChildren()) do
-			if v:IsA("Frame") then
-				Oldest = v
-				break
-			end
-		end
-
-		if Oldest then
-			Oldest:Destroy()
-		end
+	if #Notifications >= MAX_NOTIFICATIONS then
+		Notifications[1]:Destroy()
 	end
 
 	local Frame = Instance.new("Frame")
@@ -53,15 +56,15 @@ function Notify(Title, Message, Duration)
 	Frame.Size = UDim2.new(0,260,0,75)
 	Frame.BackgroundColor3 = Color3.fromRGB(40,40,40)
 	Frame.BorderSizePixel = 0
-	Frame.Position = UDim2.new(1.2,0,0,0)
+	Frame.ClipsDescendants = true
 
 	local Corner = Instance.new("UICorner")
 	Corner.Parent = Frame
 
 	local Stroke = Instance.new("UIStroke")
 	Stroke.Parent = Frame
-	Stroke.Color = Color3.fromRGB(90,90,90)
 	Stroke.Thickness = 1
+	Stroke.Color = Color3.fromRGB(90,90,90)
 
 	local TitleLabel = Instance.new("TextLabel")
 	TitleLabel.Parent = Frame
@@ -72,7 +75,7 @@ function Notify(Title, Message, Duration)
 	TitleLabel.TextSize = 21
 	TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 	TitleLabel.TextColor3 = Color3.new(1,1,1)
-	TitleLabel.Text = Title
+	TitleLabel.Text = tostring(Title)
 
 	local Line = Instance.new("Frame")
 	Line.Parent = Frame
@@ -92,7 +95,7 @@ function Notify(Title, Message, Duration)
 	MessageLabel.TextXAlignment = Enum.TextXAlignment.Left
 	MessageLabel.TextYAlignment = Enum.TextYAlignment.Top
 	MessageLabel.TextColor3 = Color3.new(1,1,1)
-	MessageLabel.Text = Message
+	MessageLabel.Text = tostring(Message)
 
 	local ProgressBG = Instance.new("Frame")
 	ProgressBG.Parent = Frame
@@ -107,45 +110,60 @@ function Notify(Title, Message, Duration)
 	Progress.BorderSizePixel = 0
 	Progress.BackgroundColor3 = Color3.fromRGB(0,170,255)
 
+	local ProgressCorner = Instance.new("UICorner")
+	ProgressCorner.Parent = Progress
+
 	Frame.BackgroundTransparency = 1
 	TitleLabel.TextTransparency = 1
 	MessageLabel.TextTransparency = 1
 	Line.BackgroundTransparency = 1
 
-	local OriginalSize = Frame.Size
-
+	local FinalSize = Frame.Size
 	Frame.Size = UDim2.new(0,0,0,75)
 
 	TweenService:Create(
 		Frame,
-		TweenInfo.new(0.35,Enum.EasingStyle.Back),
+		TweenInfo.new(
+			0.35,
+			Enum.EasingStyle.Back,
+			Enum.EasingDirection.Out
+		),
 		{
-			Size = OriginalSize,
+			Size = FinalSize,
 			BackgroundTransparency = 0
 		}
 	):Play()
 
 	TweenService:Create(
 		TitleLabel,
-		TweenInfo.new(0.3),
-		{TextTransparency = 0}
+		TweenInfo.new(0.25),
+		{
+			TextTransparency = 0
+		}
 	):Play()
 
 	TweenService:Create(
 		MessageLabel,
-		TweenInfo.new(0.3),
-		{TextTransparency = 0}
+		TweenInfo.new(0.25),
+		{
+			TextTransparency = 0
+		}
 	):Play()
 
 	TweenService:Create(
 		Line,
-		TweenInfo.new(0.3),
-		{BackgroundTransparency = 0}
+		TweenInfo.new(0.25),
+		{
+			BackgroundTransparency = 0
+		}
 	):Play()
 
 	TweenService:Create(
 		Progress,
-		TweenInfo.new(Duration,Enum.EasingStyle.Linear),
+		TweenInfo.new(
+			Duration,
+			Enum.EasingStyle.Linear
+		),
 		{
 			Size = UDim2.new(0,0,1,0)
 		}
@@ -156,7 +174,11 @@ function Notify(Title, Message, Duration)
 
 		TweenService:Create(
 			Frame,
-			TweenInfo.new(0.3),
+			TweenInfo.new(
+				0.25,
+				Enum.EasingStyle.Quart,
+				Enum.EasingDirection.In
+			),
 			{
 				Size = UDim2.new(0,0,0,75),
 				BackgroundTransparency = 1
@@ -166,19 +188,25 @@ function Notify(Title, Message, Duration)
 		TweenService:Create(
 			TitleLabel,
 			TweenInfo.new(0.2),
-			{TextTransparency = 1}
+			{
+				TextTransparency = 1
+			}
 		):Play()
 
 		TweenService:Create(
 			MessageLabel,
 			TweenInfo.new(0.2),
-			{TextTransparency = 1}
+			{
+				TextTransparency = 1
+			}
 		):Play()
 
-		task.wait(0.35)
+		task.wait(0.3)
 
-		if Frame then
+		if Frame and Frame.Parent then
 			Frame:Destroy()
 		end
 	end)
 end
+
+return Notify
