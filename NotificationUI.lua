@@ -59,6 +59,7 @@ local function Notify(Title, Message, Duration)
 	Frame.ClipsDescendants = true
 
 	local Corner = Instance.new("UICorner")
+	Corner.CornerRadius = UDim.new(0, 5)
 	Corner.Parent = Frame
 
 	local Stroke = Instance.new("UIStroke")
