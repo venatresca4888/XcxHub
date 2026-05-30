@@ -13,19 +13,19 @@ if not NotificationGui then
 	NotificationGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 	NotificationGui.Parent = CoreGui
 
-	local Holder = Instance.new("Frame")
-	Holder.Name = "Holder"
-	Holder.Parent = NotificationGui
-	Holder.BackgroundTransparency = 1
-	Holder.AnchorPoint = Vector2.new(1,0)
-	Holder.Position = UDim2.new(1,-20,0,20)
-	Holder.Size = UDim2.new(0,280,1,0)
+	local NotificationHolder = Instance.new("Frame")
+	NotificationHolder.Name = "Holder"
+	NotificationHolder.Parent = NotificationGui
+	NotificationHolder.BackgroundTransparency = 1
+	NotificationHolder.AnchorPoint = Vector2.new(1,0)
+	NotificationHolder.Position = UDim2.new(1,-20,0,20)
+	NotificationHolder.Size = UDim2.new(0,280,1,0)
 
-	local Layout = Instance.new("UIListLayout")
-	Layout.Parent = Holder
-	Layout.Padding = UDim.new(0,10)
-	Layout.HorizontalAlignment = Enum.HorizontalAlignment.Right
-	Layout.SortOrder = Enum.SortOrder.LayoutOrder
+	local NotificationLayout = Instance.new("UIListLayout")
+	NotificationLayout.Parent = NotificationHolder
+	NotificationLayout.Padding = UDim.new(0,10)
+	NotificationLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+	NotificationLayout.SortOrder = Enum.SortOrder.LayoutOrder
 end
 
 local Holder = NotificationGui.Holder
@@ -58,14 +58,14 @@ local function Notify(Title, Message, Duration)
 	NotificationFrame.BorderSizePixel = 0
 	NotificationFrame.ClipsDescendants = true
 
-	local Corner = Instance.new("UICorner")
-	Corner.CornerRadius = UDim.new(0, 5)
-	Corner.Parent = NotificationFrame
+	local NotificationCorner = Instance.new("UICorner")
+	NotificationCorner.CornerRadius = UDim.new(0, 5)
+	NotificationCorner.Parent = NotificationFrame
 
-	local Stroke = Instance.new("UIStroke")
-	Stroke.Parent = NotificationFrame
-	Stroke.Thickness = 1
-	Stroke.Color = Color3.fromRGB(90,90,90)
+	local NotificationStroke = Instance.new("UIStroke")
+	NotificationStroke.Parent = NotificationFrame
+	NotificationStroke.Thickness = 1
+	NotificationStroke.Color = Color3.fromRGB(90,90,90)
 
 	local NotificationTitle = Instance.new("TextLabel")
 	NotificationTitle.Parent = NotificationFrame
@@ -78,12 +78,12 @@ local function Notify(Title, Message, Duration)
 	NotificationTitle.TextColor3 = Color3.new(1,1,1)
 	NotificationTitle.Text = tostring(Title)
 
-	local Line = Instance.new("Frame")
-	Line.Parent = NotificationFrame
-	Line.Size = UDim2.new(1,0,0,2)
-	Line.Position = UDim2.new(0,0,0,28)
-	Line.BorderSizePixel = 0
-	Line.BackgroundColor3 = Color3.fromRGB(70,70,70)
+	local NotificationLine = Instance.new("Frame")
+	NotificationLine.Parent = NotificationFrame
+	NotificationLine.Size = UDim2.new(1,0,0,2)
+	NotificationLine.Position = UDim2.new(0,0,0,28)
+	NotificationLine.BorderSizePixel = 0
+	NotificationLine.BackgroundColor3 = Color3.fromRGB(70,70,70)
 
 	local NotificationLabel = Instance.new("TextLabel")
 	NotificationLabel.Parent = NotificationFrame
@@ -98,26 +98,26 @@ local function Notify(Title, Message, Duration)
 	NotificationLabel.TextColor3 = Color3.new(1,1,1)
 	NotificationLabel.Text = tostring(Message)
 
-	local ProgressBG = Instance.new("Frame")
-	ProgressBG.Parent = NotificationFrame
-	ProgressBG.Size = UDim2.new(1,0,0,3)
-	ProgressBG.Position = UDim2.new(0,0,1,-3)
-	ProgressBG.BorderSizePixel = 0
-	ProgressBG.BackgroundColor3 = Color3.fromRGB(25,25,25)
+	local NotificationProgressBG = Instance.new("Frame")
+	NotificationProgressBG.Parent = NotificationFrame
+	NotificationProgressBG.Size = UDim2.new(1,0,0,3)
+	NotificationProgressBG.Position = UDim2.new(0,0,1,-3)
+	NotificationProgressBG.BorderSizePixel = 0
+	NotificationProgressBG.BackgroundColor3 = Color3.fromRGB(25,25,25)
 
-	local Progress = Instance.new("Frame")
-	Progress.Parent = ProgressBG
-	Progress.Size = UDim2.new(1,0,1,0)
-	Progress.BorderSizePixel = 0
-	Progress.BackgroundColor3 = Color3.fromRGB(0,170,255)
+	local NotificationProgress = Instance.new("Frame")
+	NotificationProgress.Parent = NotificationProgressBG
+	NotificationProgress.Size = UDim2.new(1,0,1,0)
+	NotificationProgress.BorderSizePixel = 0
+	NotificationProgress.BackgroundColor3 = Color3.fromRGB(0,170,255)
 
-	local ProgressCorner = Instance.new("UICorner")
-	ProgressCorner.Parent = Progress
+	local NotificationProgressCorner = Instance.new("UICorner")
+	NotificationProgressCorner.Parent = NotificationProgress
 
 	NotificationFrame.BackgroundTransparency = 1
 	NotificationTitle.TextTransparency = 1
 	NotificationLabel.TextTransparency = 1
-	Line.BackgroundTransparency = 1
+	NotificationLine.BackgroundTransparency = 1
 
 	local FinalSize = NotificationFrame.Size
 	NotificationFrame.Size = UDim2.new(0,0,0,75)
@@ -152,7 +152,7 @@ local function Notify(Title, Message, Duration)
 	):Play()
 
 	TweenService:Create(
-		Line,
+		NotificationLine,
 		TweenInfo.new(0.25),
 		{
 			BackgroundTransparency = 0
@@ -160,7 +160,7 @@ local function Notify(Title, Message, Duration)
 	):Play()
 
 	TweenService:Create(
-		Progress,
+		NotificationProgress,
 		TweenInfo.new(
 			Duration,
 			Enum.EasingStyle.Linear
