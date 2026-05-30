@@ -1,175 +1,184 @@
-local NotificationGui = Instance.new("ScreenGui")
-local NotificationFrame = Instance.new("Frame")
-local UICorner = Instance.new("UICorner")
-local NotificationHeadFrame = Instance.new("Frame")
-local NotificationTitle = Instance.new("TextLabel")
-local NotificationTextBox = Instance.new("TextBox")
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
 
-if game:GetService("CoreGui"):FindFirstChild("NotificationGui") then
-	game:GetService("CoreGui").NotificationGui:Destroy()
+local MAX_NOTIFICATIONS = 3
+
+local Gui = CoreGui:FindFirstChild("NotificationGui")
+
+if not Gui then
+	Gui = Instance.new("ScreenGui")
+	Gui.Name = "NotificationGui"
+	Gui.ResetOnSpawn = false
+	Gui.DisplayOrder = 999999
+	Gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+	Gui.Parent = CoreGui
+
+	local Holder = Instance.new("Frame")
+	Holder.Name = "Holder"
+	Holder.Parent = Gui
+	Holder.BackgroundTransparency = 1
+	Holder.AnchorPoint = Vector2.new(1,0)
+	Holder.Position = UDim2.new(1,-20,0,20)
+	Holder.Size = UDim2.new(0,280,1,0)
+
+	local Layout = Instance.new("UIListLayout")
+	Layout.Parent = Holder
+	Layout.Padding = UDim.new(0,10)
+	Layout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+	Layout.SortOrder = Enum.SortOrder.LayoutOrder
 end
 
-NotificationGui.Name = "NotificationGui"
-NotificationGui.Parent = game:GetService"CoreGui"
-NotificationGui.DisplayOrder = 999999 
-NotificationGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
-NotificationGui.ResetOnSpawn = false
+local Holder = Gui.Holder
 
-NotificationFrame.Name = "NotificationFrame"
-NotificationFrame.Parent = NotificationGui
-NotificationFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-NotificationFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-NotificationFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-NotificationFrame.BorderSizePixel = 0
-NotificationFrame.Position = UDim2.new(0.834279239, 0, 0.153076932, 0)
-NotificationFrame.Size = UDim2.new(0, 260, 0, 69)
+function Notify(Title, Message, Duration)
+	Duration = Duration or 5
 
-UICorner.CornerRadius = UDim.new(0, 5)
-UICorner.Parent = NotificationFrame
+	while #Holder:GetChildren() > MAX_NOTIFICATIONS + 1 do
+		local Oldest
 
-NotificationHeadFrame.Name = "NotificationHeadFrame"
-NotificationHeadFrame.Parent = NotificationFrame
-NotificationHeadFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-NotificationHeadFrame.BackgroundColor3 = Color3.fromRGB(67, 67, 67)
-NotificationHeadFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-NotificationHeadFrame.BorderSizePixel = 0
-NotificationHeadFrame.Position = UDim2.new(0.5, 0, 0.387681037, 0)
-NotificationHeadFrame.Size = UDim2.new(0, 260, 0, 2)
+		for _,v in ipairs(Holder:GetChildren()) do
+			if v:IsA("Frame") then
+				Oldest = v
+				break
+			end
+		end
 
-NotificationTitle.Name = "NotificationTitle"
-NotificationTitle.Parent = NotificationFrame
-NotificationTitle.AnchorPoint = Vector2.new(0.5, 0.5)
-NotificationTitle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-NotificationTitle.BackgroundTransparency = 1.000
-NotificationTitle.BorderColor3 = Color3.fromRGB(0, 0, 0)
-NotificationTitle.BorderSizePixel = 0
-NotificationTitle.Position = UDim2.new(0.5, 0, 0.211050496, 0)
-NotificationTitle.Size = UDim2.new(0, 200, 0, 26)
-NotificationTitle.Font = Enum.Font.SourceSansBold
-NotificationTitle.Text = "Xcx Manager"
-NotificationTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-NotificationTitle.TextSize = 21.000
-NotificationTitle.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+		if Oldest then
+			Oldest:Destroy()
+		end
+	end
 
-NotificationTextBox.Name = "NotificationTextBox"
-NotificationTextBox.Parent = NotificationFrame
-NotificationTextBox.AnchorPoint = Vector2.new(0.5, 0.5)
-NotificationTextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-NotificationTextBox.BackgroundTransparency = 1.000
-NotificationTextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
-NotificationTextBox.BorderSizePixel = 0
-NotificationTextBox.Position = UDim2.new(0.5, 0, 0.695652187, 0)
-NotificationTextBox.Size = UDim2.new(0, 248, 0, 41)
-NotificationTextBox.Font = Enum.Font.SourceSans
-NotificationTextBox.Text = ""
-NotificationTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-NotificationTextBox.TextSize = 20.000
-NotificationTextBox.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
-NotificationTextBox.TextXAlignment = Enum.TextXAlignment.Left
-NotificationTextBox.TextYAlignment = Enum.TextYAlignment.Top
+	local Frame = Instance.new("Frame")
+	Frame.Parent = Holder
+	Frame.Size = UDim2.new(0,260,0,75)
+	Frame.BackgroundColor3 = Color3.fromRGB(40,40,40)
+	Frame.BorderSizePixel = 0
+	Frame.Position = UDim2.new(1.2,0,0,0)
 
-local TweenService = game:GetService("TweenService")
+	local Corner = Instance.new("UICorner")
+	Corner.Parent = Frame
 
--- ตำแหน่งสุดท้าย
-local EndPos = UDim2.new(0.834279239, 0, 0.153076932, 0)
+	local Stroke = Instance.new("UIStroke")
+	Stroke.Parent = Frame
+	Stroke.Color = Color3.fromRGB(90,90,90)
+	Stroke.Thickness = 1
 
--- เริ่มนอกจอทางขวา
-NotificationFrame.Position = UDim2.new(1.2, 0, EndPos.Y.Scale, 0)
+	local TitleLabel = Instance.new("TextLabel")
+	TitleLabel.Parent = Frame
+	TitleLabel.BackgroundTransparency = 1
+	TitleLabel.Position = UDim2.new(0,8,0,4)
+	TitleLabel.Size = UDim2.new(1,-16,0,22)
+	TitleLabel.Font = Enum.Font.SourceSansBold
+	TitleLabel.TextSize = 21
+	TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+	TitleLabel.TextColor3 = Color3.new(1,1,1)
+	TitleLabel.Text = Title
 
--- ซ่อนตอนเริ่ม
-NotificationFrame.BackgroundTransparency = 1
-NotificationTitle.TextTransparency = 1
-NotificationTextBox.TextTransparency = 1
-NotificationHeadFrame.BackgroundTransparency = 1
+	local Line = Instance.new("Frame")
+	Line.Parent = Frame
+	Line.Size = UDim2.new(1,0,0,2)
+	Line.Position = UDim2.new(0,0,0,28)
+	Line.BorderSizePixel = 0
+	Line.BackgroundColor3 = Color3.fromRGB(70,70,70)
 
--- Tween เข้า
-local ShowTween = TweenService:Create(
-	NotificationFrame,
-	TweenInfo.new(
-		0.6,
-		Enum.EasingStyle.Quart,
-		Enum.EasingDirection.Out
-	),
-	{
-		Position = EndPos,
-		BackgroundTransparency = 0
-	}
-)
+	local MessageLabel = Instance.new("TextLabel")
+	MessageLabel.Parent = Frame
+	MessageLabel.BackgroundTransparency = 1
+	MessageLabel.Position = UDim2.new(0,8,0,34)
+	MessageLabel.Size = UDim2.new(1,-16,0,28)
+	MessageLabel.Font = Enum.Font.SourceSans
+	MessageLabel.TextSize = 18
+	MessageLabel.TextWrapped = true
+	MessageLabel.TextXAlignment = Enum.TextXAlignment.Left
+	MessageLabel.TextYAlignment = Enum.TextYAlignment.Top
+	MessageLabel.TextColor3 = Color3.new(1,1,1)
+	MessageLabel.Text = Message
 
-local FadeInTitle = TweenService:Create(
-	NotificationTitle,
-	TweenInfo.new(0.5),
-	{
-		TextTransparency = 0
-	}
-)
+	local ProgressBG = Instance.new("Frame")
+	ProgressBG.Parent = Frame
+	ProgressBG.Size = UDim2.new(1,0,0,3)
+	ProgressBG.Position = UDim2.new(0,0,1,-3)
+	ProgressBG.BorderSizePixel = 0
+	ProgressBG.BackgroundColor3 = Color3.fromRGB(25,25,25)
 
-local FadeInText = TweenService:Create(
-	NotificationTextBox,
-	TweenInfo.new(0.5),
-	{
-		TextTransparency = 0
-	}
-)
+	local Progress = Instance.new("Frame")
+	Progress.Parent = ProgressBG
+	Progress.Size = UDim2.new(1,0,1,0)
+	Progress.BorderSizePixel = 0
+	Progress.BackgroundColor3 = Color3.fromRGB(0,170,255)
 
-local FadeInLine = TweenService:Create(
-	NotificationHeadFrame,
-	TweenInfo.new(0.5),
-	{
-		BackgroundTransparency = 0
-	}
-)
+	Frame.BackgroundTransparency = 1
+	TitleLabel.TextTransparency = 1
+	MessageLabel.TextTransparency = 1
+	Line.BackgroundTransparency = 1
 
-ShowTween:Play()
-FadeInTitle:Play()
-FadeInText:Play()
-FadeInLine:Play()
+	local OriginalSize = Frame.Size
 
--- แสดง 5 วินาที
-task.wait(5)
+	Frame.Size = UDim2.new(0,0,0,75)
 
--- Tween ออก
-local HideTween = TweenService:Create(
-	NotificationFrame,
-	TweenInfo.new(
-		0.5,
-		Enum.EasingStyle.Quart,
-		Enum.EasingDirection.In
-	),
-	{
-		Position = UDim2.new(1.2, 0, EndPos.Y.Scale, 0),
-		BackgroundTransparency = 1
-	}
-)
+	TweenService:Create(
+		Frame,
+		TweenInfo.new(0.35,Enum.EasingStyle.Back),
+		{
+			Size = OriginalSize,
+			BackgroundTransparency = 0
+		}
+	):Play()
 
-local FadeOutTitle = TweenService:Create(
-	NotificationTitle,
-	TweenInfo.new(0.4),
-	{
-		TextTransparency = 1
-	}
-)
+	TweenService:Create(
+		TitleLabel,
+		TweenInfo.new(0.3),
+		{TextTransparency = 0}
+	):Play()
 
-local FadeOutText = TweenService:Create(
-	NotificationTextBox,
-	TweenInfo.new(0.4),
-	{
-		TextTransparency = 1
-	}
-)
+	TweenService:Create(
+		MessageLabel,
+		TweenInfo.new(0.3),
+		{TextTransparency = 0}
+	):Play()
 
-local FadeOutLine = TweenService:Create(
-	NotificationHeadFrame,
-	TweenInfo.new(0.4),
-	{
-		BackgroundTransparency = 1
-	}
-)
+	TweenService:Create(
+		Line,
+		TweenInfo.new(0.3),
+		{BackgroundTransparency = 0}
+	):Play()
 
-HideTween:Play()
-FadeOutTitle:Play()
-FadeOutText:Play()
-FadeOutLine:Play()
+	TweenService:Create(
+		Progress,
+		TweenInfo.new(Duration,Enum.EasingStyle.Linear),
+		{
+			Size = UDim2.new(0,0,1,0)
+		}
+	):Play()
 
-HideTween.Completed:Wait()
-NotificationGui:Destroy()
+	task.spawn(function()
+		task.wait(Duration)
+
+		TweenService:Create(
+			Frame,
+			TweenInfo.new(0.3),
+			{
+				Size = UDim2.new(0,0,0,75),
+				BackgroundTransparency = 1
+			}
+		):Play()
+
+		TweenService:Create(
+			TitleLabel,
+			TweenInfo.new(0.2),
+			{TextTransparency = 1}
+		):Play()
+
+		TweenService:Create(
+			MessageLabel,
+			TweenInfo.new(0.2),
+			{TextTransparency = 1}
+		):Play()
+
+		task.wait(0.35)
+
+		if Frame then
+			Frame:Destroy()
+		end
+	end)
+end
